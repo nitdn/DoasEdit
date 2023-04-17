@@ -1,9 +1,5 @@
 [package]
-<<<<<<< HEAD
-name = "DoasEdit"
-=======
 name = "doas_edit"
->>>>>>> c698b64 (Fixes identity crisis)
 version = "0.1.0"
 edition = "2021"
 
