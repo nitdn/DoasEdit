@@ -1,44 +1,37 @@
+root:
+  Cargo.toml:
+    package: {edit_file: 0.1.0, edition: 2021}
+    dependencies: {tempfile, diff, fs_extra, duct, users}
+  src:
+    main.rs:
+      imports: [file_ops::process_file, std::{io, env}]
+      main:
+        - Validate args
+        - Call process_file
+    file_ops:
+      mod.rs:
+        imports: [copy_to_temp, edit_temp_file, compare_and_copy, process_file]
+      process_file.rs:
+        imports: [std, crate::file_ops]
+        process_file:
+          - Access or create file
+          - Handle permission
+          - Call copy_to_temp, edit_temp_file, compare_and_copy
+      copy_to_temp.rs:
+        imports: [std, tempfile]
+        copy_to_temp:
+          - Create temp file
+          - Copy source to temp
+      edit_temp_file.rs:
+        imports: [std]
+        edit_temp_file:
+          - Get editor
+          - Open temp in editor
+          - User interaction
+      compare_and_copy.rs:
+        imports: [std, diff, fs_extra]
+        compare_and_copy:
+          - Compare files
+          - Handle comparison
+          - Copy temp to source
 
-project:
-  root:
-    Cargo.toml:
-      package: {name: edit_file, version: 0.1.0, edition: 2018}
-      dependencies: {tempfile: 3.2.0, diff: 0.1.12, fs_extra: 1.2.0, duct: 0.14.0, users: 0.11.0}
-    src:
-      main.rs:
-        imports: [file_ops::process_file, std::{io, env}]
-        main:
-          - Validate args, EAFP
-          - Call process_file with file path
-      file_ops:
-        mod.rs:
-          imports: [copy_to_temp, edit_temp_file, compare_and_copy]
-          process_file:
-            - Try to access file, create if not exists
-              - Use doas if PermissionDenied
-            - Handle permission, use doas if PermissionDenied
-            - Call copy_to_temp, edit_temp_file, compare_and_copy
-        copy_to_temp.rs:
-          imports: [std::{io, fs::File}, tempfile::NamedTempFile]
-          copy_to_temp:
-            - Create temp file
-            - Try to copy source to temp
-              - Use doas if PermissionDenied
-        edit_temp_file.rs:
-          imports: [std::{io, process::Command, env}]
-          edit_temp_file:
-            - Get editor securely
-            - Try to open temp file in editor
-              - Use doas if PermissionDenied
-            - Handle user interaction
-        compare_and_copy.rs:
-          imports: [std::{io, fs, path::Path}, diff::lines, fs_extra::file::copy]
-          compare_and_copy:
-            - Compare source and temp files
-            - Handle file comparison
-            - Try to copy temp to source if changes
-              - Use doas if PermissionDenied
-            - Ensure secure file operations
-
-              - doas if needed
-            - Ensure secure file operations

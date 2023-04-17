@@ -1,13 +1,9 @@
 mod compare_and_copy;
 mod copy_to_temp;
 mod edit_temp_file;
+mod process_file; // Add this line to include the new process_file.rs file
 
-use std::io;
-
-pub fn process_file(file_path: &str) -> io::Result<()> {
-    // Check file, create if not exists
-    // Handle permission, use doas if needed
-    let temp_file = copy_to_temp::copy_to_temp(file_path)?;
-    edit_temp_file::edit_temp_file(&temp_file)?;
-    compare_and_copy::compare_and_copy(file_path, &temp_file)
-}
+pub use compare_and_copy::compare_and_copy;
+pub use copy_to_temp::copy_to_temp;
+pub use edit_temp_file::edit_temp_file;
+pub use process_file::process_file; // Add this line to re-export the process_file function
