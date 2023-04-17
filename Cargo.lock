@@ -3,6 +3,16 @@
 version = 3
 
 [[package]]
+name = "DoasEdit"
+version = "0.1.0"
+dependencies = [
+ "diff",
+ "duct",
+ "fs_extra",
+ "tempfile",
+]
+
+[[package]]
 name = "bitflags"
 version = "1.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -36,16 +46,6 @@ dependencies = [
  "once_cell",
  "os_pipe",
  "shared_child",
-]
-
-[[package]]
-name = "edit_file"
-version = "0.1.0"
-dependencies = [
- "diff",
- "duct",
- "fs_extra",
- "tempfile",
 ]
 
 [[package]]
