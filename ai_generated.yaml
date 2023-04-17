@@ -1,6 +1,6 @@
 root:
   Cargo.toml:
-    package: {edit_file: 0.1.0, edition: 2021}
+    package: {doas_edit: 0.1.0, edition: 2021}
     dependencies: {tempfile, diff, fs_extra, duct, users}
   src:
     main.rs:
