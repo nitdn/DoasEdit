@@ -1,17 +1,15 @@
-use diff::lines;
 use duct::cmd;
-use std::{fs, io};
+use std::{fs, io, process::Command};
 
 pub fn compare_and_copy(file_path: &str, temp_file: &tempfile::NamedTempFile) -> io::Result<()> {
-    let source_content = fs::read_to_string(file_path)?;
-    let temp_content = fs::read_to_string(temp_file)?;
+    let output = Command::new("diff")
+        .arg("-q")
+        .arg(file_path)
+        .arg(temp_file.path())
+        .output()?;
 
-    let diff = lines(&source_content, &temp_content);
-
-    if diff
-        .into_iter()
-        .any(|line| !matches!(line, diff::Result::Both(_, _)))
-    {
+    if !output.stdout.is_empty() {
+        // diff found differences
         if let Err(e) = fs::copy(temp_file.path(), file_path) {
             if e.kind() == io::ErrorKind::PermissionDenied {
                 // Use doas if permission denied
